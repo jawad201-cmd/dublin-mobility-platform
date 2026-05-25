@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
@@ -18,6 +19,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Database connection - use environment variable for cloud, fallback for local
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql+psycopg2://airflow:airflow@localhost:5432/mobility_db")
+
+# Fix for Render/Neon - they use 'postgres://' but SQLAlchemy needs 'postgresql://'
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+engine = create_engine(DATABASE_URL)
 
 # Connect to Docker DB
 DB_CONN = "postgresql+psycopg2://airflow:airflow@localhost:5432/mobility_db"
