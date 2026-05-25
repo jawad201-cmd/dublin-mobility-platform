@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # SERVICE 1: The Database
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=mobility_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow", "-d", "mobility_db"]
+      interval: 5s
+      retries: 5
+
+  # SERVICE 2: Airflow Webserver (The UI)
+  airflow-webserver:
+    build: .
+    command: webserver
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/mobility_db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./transform:/opt/airflow/dbt
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # SERVICE 3: Airflow Scheduler (The Worker)
+  airflow-scheduler:
+    build: .
+    command: scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/mobility_db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./transform:/opt/airflow/dbt
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # SERVICE 4: Database Initializer (Runs once then dies)
+  airflow-init:
+    build: .
+    command: version
+    environment:
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/mobility_db
+      - _AIRFLOW_DB_UPGRADE=true
+      - _AIRFLOW_WWW_USER_CREATE=true
+      - _AIRFLOW_WWW_USER_USERNAME=admin
+      - _AIRFLOW_WWW_USER_PASSWORD=admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

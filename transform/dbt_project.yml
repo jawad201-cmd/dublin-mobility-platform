@@ -1,0 +1,29 @@
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'transform'
+version: '1.0.0'
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'transform'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+models:
+  transform:
+    # Bronze layer - raw data (if you have any)
+    +materialized: table
+    
+    # You can organize by folders later, for now all models in models/ folder
+    # Incremental models are configured in the model file itself
