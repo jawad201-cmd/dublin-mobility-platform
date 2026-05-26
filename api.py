@@ -29,11 +29,6 @@ if DATABASE_URL.startswith("postgres://"):
 
 engine = create_engine(DATABASE_URL)
 
-# Connect to Docker DB
-DB_CONN = "postgresql+psycopg2://airflow:airflow@localhost:5432/mobility_db"
-engine = create_engine(DB_CONN)
-
-
 def clean_value(val):
     if val is None:
         return None
