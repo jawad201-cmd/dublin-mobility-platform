@@ -271,12 +271,15 @@ function App() {
   }, [vehicles, selectedID, filterRoute, filterCategory, delayMaps]);
 
   const ghostDots = useMemo(() => {
+    // If showGhosts is false, return empty array (hide all ghost dots from map)
+    if (!showGhosts) return [];
+    
     return filteredDelays.filter(d => {
       const hasLiveVehicle = vehicles.some(v => v.route_id === d.route_id || v.trip_id === d.route_id);
       const matchesRouteFilter = filterRoute === "ALL" || getCleanRouteName(d.route_id) === filterRoute;
       return !hasLiveVehicle && d.last_lat != null && d.last_lon != null && matchesRouteFilter;
     });
-  }, [vehicles, filteredDelays, filterRoute]);
+  }, [vehicles, filteredDelays, filterRoute, showGhosts]);
 
   const getSummaryCount = (category) => {
     const found = delaySummary.find(s => s.delay_category === category);
