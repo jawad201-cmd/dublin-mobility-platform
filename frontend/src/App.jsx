@@ -140,6 +140,8 @@ const SummaryTrendIndicator = ({ change }) => {
   return <span className="summary-trend trend-down">{change}</span>;
 };
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
 function App() {
   const [vehicles, setVehicles] = useState([]);
   const [allDelays, setAllDelays] = useState([]);
@@ -161,9 +163,9 @@ function App() {
         setError(null);
         
         const [vRes, allDelaysRes, summaryRes] = await Promise.all([
-          axios.get('http://127.0.0.1:8000/vehicles'),
-          axios.get('http://127.0.0.1:8000/delays?limit=10000'),
-          axios.get('http://127.0.0.1:8000/delays/summary')
+          axios.get(`${API_URL}/vehicles`),
+          axios.get(`${API_URL}/delays?limit=10000`),
+          axios.get(`${API_URL}/delays/summary`)
         ]);
         
         setVehicles(vRes.data || []);
@@ -188,7 +190,7 @@ function App() {
         if (filterCategory === "ALL") {
           setFilteredDelays(allDelays);
         } else {
-          const res = await axios.get(`http://127.0.0.1:8000/delays?category=${filterCategory.toLowerCase()}&limit=5000`);
+          const res = await axios.get(`${API_URL}/delays?category=${filterCategory.toLowerCase()}&limit=5000`);
           setFilteredDelays(res.data || []);
         }
       } catch (e) {
