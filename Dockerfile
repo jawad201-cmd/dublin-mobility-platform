@@ -1,18 +1,20 @@
-@"
-FROM python:3.11-slim
+FROM apache/airflow:2.7.1
 
-WORKDIR /app
+# Switch to root to install git
+USER root
 
-# Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Run these one by one to avoid formatting errors
+RUN apt-get update
+RUN apt-get install -y git
 
-# Copy app code
-COPY api.py .
+# Switch back to airflow user
+USER airflow
 
-# Expose port
-EXPOSE 10000
-
-# Run the app
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "10000"]
-"@ | Out-File -FilePath Dockerfile -Encoding UTF8
+# Install Python libraries (added dbt-postgres)
+RUN pip install --no-cache-dir \
+    gtfs-realtime-bindings \
+    requests \
+    protobuf \
+    pandas \
+    psycopg2-binary \
+    dbt-postgres==1.7.4
