@@ -1,5 +1,6 @@
 /* ========================================
    DUBLIN MOBILITY COMMAND CENTER - STYLES
+   Mobile-First Responsive Design
    ======================================== */
 
 * {
@@ -36,6 +37,7 @@ body {
   flex: 1;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 /* --- NAVBAR --- */
@@ -48,12 +50,14 @@ body {
   border-bottom: 1px solid rgba(0, 204, 255, 0.2);
   backdrop-filter: blur(10px);
   width: 100%;
+  gap: 12px;
 }
 
 .brand h1 {
   font-size: 1.4rem;
   font-weight: 600;
   color: #fff;
+  white-space: nowrap;
 }
 
 .brand .highlight {
@@ -111,6 +115,23 @@ body {
   box-shadow: 0 0 0 2px rgba(0, 204, 255, 0.2);
 }
 
+/* --- MOBILE MENU BUTTON --- */
+.mobile-menu-btn {
+  display: none;
+  background: rgba(0, 204, 255, 0.2);
+  border: 1px solid rgba(0, 204, 255, 0.4);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #00ccff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(0, 204, 255, 0.3);
+}
+
 /* --- SIDEBAR --- */
 .sidebar {
   width: 340px;
@@ -120,6 +141,39 @@ body {
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+
+/* --- SIDEBAR CLOSE BUTTON (hidden on desktop) --- */
+.sidebar-close-btn {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 101;
+}
+
+.sidebar-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- SIDEBAR OVERLAY (hidden on desktop) --- */
+.sidebar-overlay {
+  display: none;
+}
+
+/* --- MOBILE FILTERS (hidden on desktop) --- */
+.mobile-filters {
+  display: none;
 }
 
 .sidebar-header {
@@ -302,6 +356,11 @@ body {
 
 .warning-dialog button:hover {
   background: rgba(255, 77, 79, 0.5);
+}
+
+/* --- LEGEND TOGGLE BUTTON (hidden on desktop) --- */
+.legend-toggle-btn {
+  display: none;
 }
 
 /* --- MAP LEGEND --- */
@@ -735,4 +794,201 @@ body {
 .route-filter-select {
   min-width: 280px;
   max-width: 400px;
+}
+
+
+/* ========================================
+   MOBILE RESPONSIVE STYLES (< 768px)
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* --- NAVBAR MOBILE --- */
+  .navbar {
+    padding: 10px 16px;
+    justify-content: space-between;
+  }
+
+  .brand h1 {
+    font-size: 1.1rem;
+  }
+
+  /* Hide status and filters on mobile navbar */
+  .nav-status {
+    display: none;
+  }
+
+  .filter-controls {
+    display: none;
+  }
+
+  /* Show hamburger menu */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* --- SIDEBAR MOBILE (slide-out drawer) --- */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 85%;
+    max-width: 320px;
+    transform: translateX(-100%);
+    z-index: 200;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Show close button on mobile */
+  .sidebar-close-btn {
+    display: block;
+  }
+
+  /* Show overlay on mobile */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 150;
+  }
+
+  /* Show mobile filters */
+  .mobile-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 60px 16px 16px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-filters .route-select {
+    width: 100%;
+  }
+
+  /* --- MAP LEGEND MOBILE --- */
+  .map-legend {
+    display: none;
+    bottom: 80px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .map-legend.open {
+    display: block;
+  }
+
+  /* Show legend toggle button on mobile */
+  .legend-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    background: rgba(15, 15, 25, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  /* --- WARNING DIALOG MOBILE --- */
+  .warning-dialog {
+    width: 90%;
+    max-width: none;
+    padding: 12px 16px;
+    top: 10px;
+  }
+
+  /* --- DELAY STATS MOBILE --- */
+  .delay-stats {
+    gap: 6px;
+  }
+
+  .delay-stats .stat {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+  }
+
+  /* --- TREND SUMMARY MOBILE --- */
+  .trend-summary {
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .trend-stat {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+
+  /* --- TABLE MOBILE --- */
+  .table-wrapper th,
+  .table-wrapper td {
+    padding: 10px 12px;
+  }
+
+  .trip-id-text {
+    font-size: 0.75rem;
+  }
+
+  .route-subtext {
+    font-size: 0.65rem;
+  }
+
+  .time-cell {
+    font-size: 0.8rem;
+  }
+
+  .trend-indicator {
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    font-size: 1rem;
+  }
+
+  /* --- ROUTE FILTER SELECT MOBILE --- */
+  .route-filter-select {
+    min-width: unset;
+    max-width: 100%;
+  }
+}
+
+/* --- EXTRA SMALL MOBILE (< 400px) --- */
+@media (max-width: 400px) {
+  .brand h1 {
+    font-size: 0.95rem;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-width: none;
+  }
+
+  .delay-stats .stat {
+    font-size: 0.6rem;
+    padding: 2px 5px;
+  }
+
+  .category-badge {
+    font-size: 0.55rem;
+    padding: 1px 4px;
+  }
+
+  .legend-toggle-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
 }

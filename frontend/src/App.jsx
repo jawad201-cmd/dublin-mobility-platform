@@ -155,6 +155,10 @@ function App() {
   const [error, setError] = useState(null);
   const [delaySummary, setDelaySummary] = useState([]);
   const [showGhosts, setShowGhosts] = useState(false);
+  
+  // --- MOBILE STATE ---
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [legendOpen, setLegendOpen] = useState(false);
 
   // FETCH ALL DATA
   useEffect(() => {
@@ -230,6 +234,7 @@ function App() {
   const handleDelayClick = (row) => {
     setSelectedID(row.route_id);
     setOfflineAlert(null);
+    setSidebarOpen(false); // Close sidebar on mobile after selection
 
     const matches = vehicles.filter(v => v.route_id === row.route_id || v.trip_id === row.route_id);
 
@@ -347,10 +352,10 @@ function App() {
     <div className="dashboard-container">
       <nav className="navbar">
         <div className="brand">
-          <h1>Dublin Mobility <span className="highlight">Command Center</span></h1>
+          <h1>Dublin <span className="highlight">Mobility</span></h1>
         </div>
         <div className="nav-status">
-          {error && <span className="status-warning">⚠️ Update failed - showing cached data</span>}
+          {error && <span className="status-warning">⚠️ Update failed</span>}
           <span className="status-live">● LIVE</span>
         </div>
         <div className="filter-controls">
@@ -389,10 +394,71 @@ function App() {
             ))}
           </select>
         </div>
+        
+        {/* MOBILE HAMBURGER BUTTON */}
+        <button 
+          className="mobile-menu-btn"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Toggle menu"
+        >
+          ☰
+        </button>
       </nav>
 
       <div className="content-wrapper">
-        <aside className="sidebar">
+        {/* MOBILE OVERLAY */}
+        {sidebarOpen && (
+          <div 
+            className="sidebar-overlay" 
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        
+        <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+          {/* MOBILE CLOSE BUTTON */}
+          <button 
+            className="sidebar-close-btn"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+          
+          {/* MOBILE FILTERS (duplicated for mobile sidebar) */}
+          <div className="mobile-filters">
+            <select 
+              value={filterCategory} 
+              onChange={(e) => { setFilterCategory(e.target.value); setSelectedID(null); }} 
+              className="route-select"
+            >
+              <option value="ALL">All Status ({totalTrips})</option>
+              <option value="early">🟣 Early ({getSummaryCount('early')})</option>
+              <option value="on_time">🔵 On-time ({getSummaryCount('on_time')})</option>
+              <option value="minor">🟢 Minor ({getSummaryCount('minor')})</option>
+              <option value="moderate">🟡 Moderate ({getSummaryCount('moderate')})</option>
+              <option value="severe">🟠 Severe ({getSummaryCount('severe')})</option>
+              <option value="critical">🔴 Critical ({getSummaryCount('critical')})</option>
+            </select>
+            
+            <select 
+              value={filterRoute} 
+              onChange={(e) => { setFilterRoute(e.target.value); setSelectedID(null); }} 
+              className="route-select"
+            >
+              <option value="ALL">All Routes</option>
+              {[...new Set(vehicles.map(v => getCleanRouteName(v.route_id)))].sort((a, b) => {
+                const aNum = parseInt(a);
+                const bNum = parseInt(b);
+                if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
+                if (!isNaN(aNum)) return -1;
+                if (!isNaN(bNum)) return 1;
+                return a.localeCompare(b);
+              }).map(r => (
+                <option key={r} value={r}>Route {r}</option>
+              ))}
+            </select>
+          </div>
+          
           <div className="sidebar-header">
             <h2>Fleet Status</h2>
             <div className="delay-stats">
@@ -571,7 +637,16 @@ function App() {
             </div>
           )}
 
-          <div className="map-legend">
+          {/* MOBILE LEGEND TOGGLE BUTTON */}
+          <button 
+            className="legend-toggle-btn"
+            onClick={() => setLegendOpen(!legendOpen)}
+            aria-label="Toggle legend"
+          >
+            ℹ️
+          </button>
+
+          <div className={`map-legend ${legendOpen ? 'open' : ''}`}>
             <div className="legend-title">Delay Status</div>
             <div className="legend-row"><span className="legend-color" style={{background: '#a855f7'}}></span> Early (ahead)</div>
             <div className="legend-row"><span className="legend-color" style={{background: '#00ccff'}}></span> On-time (0-2m)</div>
