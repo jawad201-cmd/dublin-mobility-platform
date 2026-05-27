@@ -1,31 +1,21 @@
-# 🚌 Dublin Mobility Intelligence Platform
+# Dublin Mobility Intelligence Platform
 
 A real-time data engineering platform that monitors Dublin's public transit network using NTA GTFS feeds. Built as a portfolio project demonstrating modern cloud-native architecture, ETL pipelines, and live data visualization.
 
 ![Dublin Mobility Command Center](https://img.shields.io/badge/Status-Live-brightgreen) ![React](https://img.shields.io/badge/React-18-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
 
-## 🌐 Live Demo
+## Live Demo
 
 | Service | URL |
 |---------|-----|
 | **Frontend** | [dublin-mobility-platform.vercel.app](https://dublin-mobility-platform.vercel.app) |
 | **API** | [dublin-mobility-api.onrender.com](https://dublin-mobility-api.onrender.com) |
 
-> ⚠️ Note: API runs on Render free tier and may take ~30 seconds to wake up on first request.
+> Note: API runs on Render free tier and may take ~30 seconds to wake up on first request.
 
 ---
 
-## 📸 Screenshots
-
-### Desktop Command Center
-The main dashboard showing live bus positions across Dublin with delay categorization and trend analysis.
-
-### Mobile Responsive View
-Full-screen map with collapsible sidebar for on-the-go transit monitoring.
-
----
-
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
@@ -50,7 +40,7 @@ Full-screen map with collapsible sidebar for on-the-go transit monitoring.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|------------|
@@ -64,7 +54,7 @@ Full-screen map with collapsible sidebar for on-the-go transit monitoring.
 
 ---
 
-## ✨ Features
+## Features
 
 ### Real-Time Fleet Tracking
 - Live GPS positions for 1,300+ Dublin Bus vehicles
@@ -93,7 +83,7 @@ Full-screen map with collapsible sidebar for on-the-go transit monitoring.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 dublin-mobility-platform/
@@ -119,7 +109,7 @@ dublin-mobility-platform/
 
 ---
 
-## 🚀 Deployment Guide
+## Deployment Guide
 
 ### Prerequisites
 - GitHub account
@@ -154,7 +144,7 @@ dublin-mobility-platform/
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 | Endpoint | Description |
 |----------|-------------|
@@ -183,7 +173,7 @@ GET /delays?category=critical&limit=5
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Bronze Layer (Raw Data)
 ```sql
@@ -199,7 +189,7 @@ silver_trip_delays (trip_id, route_id, avg_delay_minutes, delay_category, trend,
 
 ---
 
-## 🧪 Local Development
+## Local Development
 
 ### Backend
 ```bash
@@ -235,7 +225,7 @@ python run_etl.py
 
 ---
 
-## 📊 Data Sources
+## Data Sources
 
 | Source | Description |
 |--------|-------------|
@@ -244,7 +234,7 @@ python run_etl.py
 
 ---
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - [ ] Delay Prediction Model (XGBoost/LSTM)
 - [ ] Anomaly Detection (Isolation Forest)
@@ -255,20 +245,13 @@ python run_etl.py
 
 ---
 
-## 👥 Contributors
-
-- **Jawad Ahmad** - Developer, DevOps Engineer
-- **Claude (Anthropic)** - AI Pair Programmer
-
----
-
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - National Transport Authority (NTA) Ireland for GTFS data access
 - Dublin Bus for real-time transit data
@@ -277,5 +260,5 @@ This project is open source and available under the [MIT License](LICENSE).
 ---
 
 <p align="center">
-  <strong>Built with ☕ and 🤖 in Dublin</strong>
+  <strong>Built with and in Dublin</strong>
 </p>
